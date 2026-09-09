@@ -1,0 +1,187 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+
+function youtubeEmbed(url: string) {
+  const idMatch = url.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
+  return idMatch ? `https://www.youtube.com/embed/${idMatch[1]}` : null;
+}
+---
+
+<BaseLayout title={p.title} description={p.tagline}>
+  <article class="section project-detail">
+    <a class="back" href="/#projects">← Back to projects</a>
+    <p class="section-eyebrow">{p.dateRange}</p>
+    <h1 class="section-title">{p.title}</h1>
+    <p class="tagline">{p.tagline}</p>
+
+    <div class="tags">
+      {p.tags.map((t: string) => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+
+    <div class="links">
+      {p.links.github && (
+        <a class="neu-btn" href={p.links.github} target="_blank" rel="noopener">GitHub repo</a>
+      )}
+      {p.links.report && (
+        <a class="neu-btn" href={p.links.report} target="_blank" rel="noopener">Read report</a>
+      )}
+      {p.links.youtube && (
+        <a class="neu-btn neu-btn-accent" href={p.links.youtube} target="_blank" rel="noopener">
+          Watch full demo
+        </a>
+      )}
+    </div>
+
+    {p.highlightVideo && (
+      <div class="neu-raised media-frame">
+        <video src={p.highlightVideo} poster={p.coverImage} controls loop muted playsinline></video>
+      </div>
+    )}
+
+    {!p.highlightVideo && p.links.youtube && youtubeEmbed(p.links.youtube) && (
+      <div class="neu-raised media-frame">
+        <iframe
+          src={youtubeEmbed(p.links.youtube)!}
+          title={`${p.title} demo video`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    )}
+
+    <div class="neu-raised content-card">
+      <Content />
+    </div>
+
+    {p.gallery.length > 0 && (
+      <div class="gallery grid grid-2">
+        {p.gallery.map((g: { type: string; src: string; caption?: string }) => (
+          <figure class="neu-raised gallery-item">
+            {g.type === 'video' ? (
+              <video src={g.src} controls muted loop playsinline></video>
+            ) : (
+              <img src={g.src} alt={g.caption ?? p.title} loading="lazy" />
+            )}
+            {g.caption && <figcaption>{g.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    max-width: 860px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .media-frame {
+    padding: 0.7rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .media-frame video {
+    width: 100%;
+    border-radius: calc(var(--radius-lg) - 0.7rem);
+  }
+
+  .media-frame iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    border-radius: calc(var(--radius-lg) - 0.7rem);
+  }
+
+  .content-card {
+    padding: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .content-card :global(h2) {
+    font-size: 1.3rem;
+    margin: 1.75rem 0 0.75rem;
+  }
+
+  .content-card :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .content-card :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .content-card :global(ul) {
+    color: var(--text-dim);
+    padding-left: 1.3rem;
+  }
+
+  .content-card :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .gallery {
+    margin-top: 2.5rem;
+  }
+
+  .gallery-item {
+    padding: 0.6rem;
+    overflow: hidden;
+  }
+
+  .gallery-item img,
+  .gallery-item video {
+    width: 100%;
+    border-radius: calc(var(--radius-lg) - 0.6rem);
+  }
+
+  .gallery-item figcaption {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    padding: 0.6rem 0.4rem 0.3rem;
+  }
+</style>

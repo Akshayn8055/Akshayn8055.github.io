@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+const entries = await getCollection('projects');
+const projects = entries
+  .map((e) => ({ slug: e.id, ...e.data }))
+  .sort((a, b) => a.order - b.order);
+---
+
+<section class="section" id="projects">
+  <p class="section-eyebrow">Selected work</p>
+  <h2 class="section-title">Projects</h2>
+  <div class="grid grid-2 project-grid">
+    {projects.map((p) => (
+      <ProjectCard
+        slug={p.slug}
+        title={p.title}
+        tagline={p.tagline}
+        dateRange={p.dateRange}
+        tags={p.tags}
+        coverImage={p.coverImage}
+        highlightVideo={p.highlightVideo}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .project-grid {
+    margin-top: 2rem;
+  }
+</style>

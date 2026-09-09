@@ -1,0 +1,50 @@
+---
+import { profile } from '../data/profile';
+const year = new Date().getFullYear();
+---
+
+<footer class="section" id="contact">
+  <div class="neu-raised footer-card">
+    <div>
+      <p class="section-eyebrow">Get in touch</p>
+      <h2 class="section-title">Let's build something autonomous.</h2>
+      <p>Open to robotics, AI, and UAV engineering opportunities.</p>
+    </div>
+    <div class="footer-actions">
+      <a class="neu-btn neu-btn-accent" href={`mailto:${profile.email}`}>Email me</a>
+      <a class="neu-btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a class="neu-btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <p class="fine-print">© {year} {profile.name}. Built with Astro, hosted on GitHub Pages.</p>
+</footer>
+
+<style>
+  .footer-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem;
+  }
+
+  .footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .fine-print {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 640px) {
+    .footer-card {
+      padding: 2rem;
+    }
+  }
+</style>
