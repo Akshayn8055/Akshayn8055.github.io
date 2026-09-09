@@ -1,24 +1,27 @@
 /* ============================================================
    Design tokens — Neumorphic / Soft UI
-   One base hue (a formal slate-blue) drives everything. Every
-   surface is the SAME background color; depth comes only from
-   two tinted box-shadows (a darker tint + a lighter tint of the
-   base) — never plain black or white, never a hard border.
+   One warm neutral base hue drives every surface — no blue-gray
+   "SaaS" tint. Depth comes only from two tinted box-shadows (a
+   darker tint + a lighter tint of the base) — never plain black
+   or white, never a hard border. The single accent is a deep
+   burnt-amber/copper — it echoes the rust-red mission terrain and
+   ISRO-orange team kit in the actual project photos instead of a
+   generic brand blue.
    ============================================================ */
 :root {
-  --hue: 223;
-  --sat: 22%;
+  --hue: 28;
+  --sat: 10%;
 
   /* Light theme (default) */
-  --bg-l: 92%;
+  --bg-l: 93%;
   --bg: hsl(var(--hue) var(--sat) var(--bg-l));
-  --shadow-dark: hsl(var(--hue) var(--sat) 74%);
-  --shadow-light: hsl(var(--hue) 45% 99%);
-  --text: hsl(var(--hue) 30% 22%);
-  --text-dim: hsl(var(--hue) 15% 45%);
-  --accent: hsl(190 75% 40%);
-  --accent-soft: hsl(190 70% 40% / 0.14);
-  --accent-contrast: hsl(190 85% 96%);
+  --shadow-dark: hsl(var(--hue) 14% 76%);
+  --shadow-light: hsl(35 40% 99%);
+  --text: hsl(20 22% 18%);
+  --text-dim: hsl(20 10% 42%);
+  --accent: hsl(24 82% 42%);
+  --accent-soft: hsl(24 82% 42% / 0.14);
+  --accent-contrast: hsl(24 60% 96%);
 
   --radius-lg: 28px;
   --radius-md: 20px;
@@ -35,42 +38,42 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg-l: 16%;
-    --bg: hsl(var(--hue) var(--sat) var(--bg-l));
-    --shadow-dark: hsl(var(--hue) 24% 9%);
-    --shadow-light: hsl(var(--hue) 20% 23%);
-    --text: hsl(var(--hue) 20% 92%);
-    --text-dim: hsl(var(--hue) 12% 68%);
-    --accent: hsl(190 80% 58%);
-    --accent-soft: hsl(190 80% 58% / 0.16);
-    --accent-contrast: hsl(190 40% 12%);
+    --bg-l: 14%;
+    --bg: hsl(var(--hue) 12% var(--bg-l));
+    --shadow-dark: hsl(var(--hue) 16% 7%);
+    --shadow-light: hsl(var(--hue) 12% 21%);
+    --text: hsl(28 25% 92%);
+    --text-dim: hsl(24 10% 66%);
+    --accent: hsl(28 92% 58%);
+    --accent-soft: hsl(28 92% 58% / 0.16);
+    --accent-contrast: hsl(28 45% 12%);
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg-l: 16%;
-  --bg: hsl(var(--hue) var(--sat) var(--bg-l));
-  --shadow-dark: hsl(var(--hue) 24% 9%);
-  --shadow-light: hsl(var(--hue) 20% 23%);
-  --text: hsl(var(--hue) 20% 92%);
-  --text-dim: hsl(var(--hue) 12% 68%);
-  --accent: hsl(190 80% 58%);
-  --accent-soft: hsl(190 80% 58% / 0.16);
-  --accent-contrast: hsl(190 40% 12%);
+  --bg-l: 14%;
+  --bg: hsl(var(--hue) 12% var(--bg-l));
+  --shadow-dark: hsl(var(--hue) 16% 7%);
+  --shadow-light: hsl(var(--hue) 12% 21%);
+  --text: hsl(28 25% 92%);
+  --text-dim: hsl(24 10% 66%);
+  --accent: hsl(28 92% 58%);
+  --accent-soft: hsl(28 92% 58% / 0.16);
+  --accent-contrast: hsl(28 45% 12%);
   color-scheme: dark;
 }
 
 :root[data-theme='light'] {
-  --bg-l: 92%;
+  --bg-l: 93%;
   --bg: hsl(var(--hue) var(--sat) var(--bg-l));
-  --shadow-dark: hsl(var(--hue) var(--sat) 74%);
-  --shadow-light: hsl(var(--hue) 45% 99%);
-  --text: hsl(var(--hue) 30% 22%);
-  --text-dim: hsl(var(--hue) 15% 45%);
-  --accent: hsl(190 75% 40%);
-  --accent-soft: hsl(190 70% 40% / 0.14);
-  --accent-contrast: hsl(190 85% 96%);
+  --shadow-dark: hsl(var(--hue) 14% 76%);
+  --shadow-light: hsl(35 40% 99%);
+  --text: hsl(20 22% 18%);
+  --text-dim: hsl(20 10% 42%);
+  --accent: hsl(24 82% 42%);
+  --accent-soft: hsl(24 82% 42% / 0.14);
+  --accent-contrast: hsl(24 60% 96%);
   color-scheme: light;
 }
 
@@ -82,6 +85,10 @@ html {
   scroll-behavior: smooth;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -89,6 +96,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   transition: background 0.35s ease, color 0.35s ease;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img,
@@ -208,7 +216,8 @@ p {
   background: var(--accent-soft);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.85rem;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 100%;
 }
 
 .section {

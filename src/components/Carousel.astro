@@ -1,0 +1,195 @@
+---
+interface Slide {
+  type: 'image' | 'video' | 'youtube';
+  src: string;
+  start?: number;
+}
+
+interface Props {
+  slides: Slide[];
+}
+
+const { slides } = Astro.props;
+
+function youtubeEmbed(idOrUrl: string, start?: number) {
+  const idMatch = idOrUrl.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
+  const id = idMatch ? idMatch[1] : idOrUrl;
+  const params = start ? `?start=${start}` : '';
+  return `https://www.youtube.com/embed/${id}${params}`;
+}
+---
+
+{slides.length > 0 && (
+  <div class="neu-raised carousel" data-carousel>
+    <div class="track" data-track>
+      {slides.map((s) => (
+        <div class="slide">
+          {s.type === 'youtube' ? (
+            <iframe
+              src={youtubeEmbed(s.src, s.start)}
+              title="Project video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          ) : s.type === 'video' ? (
+            <video src={s.src} controls muted loop playsinline preload="metadata"></video>
+          ) : (
+            <img src={s.src} alt="" loading="lazy" />
+          )}
+        </div>
+      ))}
+    </div>
+
+    {slides.length > 1 && (
+      <>
+        <button class="nav prev" data-prev aria-label="Previous">‹</button>
+        <button class="nav next" data-next aria-label="Next">›</button>
+        <div class="dots" data-dots>
+          {slides.map((_, i) => (
+            <button class="dot" data-dot data-index={i} aria-label={`Go to slide ${i + 1}`}></button>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+)}
+
+<style>
+  .carousel {
+    position: relative;
+    padding: 0.7rem;
+    overflow: hidden;
+  }
+
+  .track {
+    display: flex;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    border-radius: calc(var(--radius-lg) - 0.7rem);
+    scrollbar-width: none;
+  }
+
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    aspect-ratio: 16/9;
+    background: var(--shadow-dark);
+  }
+
+  .slide img,
+  .slide video,
+  .slide iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+  }
+
+  .nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-offset-sm) var(--shadow-offset-sm) var(--shadow-blur-sm) var(--shadow-dark),
+      calc(var(--shadow-offset-sm) * -1) calc(var(--shadow-offset-sm) * -1) var(--shadow-blur-sm) var(--shadow-light);
+  }
+
+  .nav:active {
+    box-shadow: inset 3px 3px 7px var(--shadow-dark), inset -3px -3px 7px var(--shadow-light);
+  }
+
+  .prev {
+    left: 1.1rem;
+  }
+
+  .next {
+    right: 1.1rem;
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 0 0.2rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: none;
+    background: var(--shadow-dark);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .dot.is-active {
+    background: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .nav {
+      width: 38px;
+      height: 38px;
+      font-size: 1.25rem;
+    }
+    .prev {
+      left: 0.6rem;
+    }
+    .next {
+      right: 0.6rem;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-track]');
+    const dots = Array.from(carousel.querySelectorAll<HTMLElement>('[data-dot]'));
+    const prev = carousel.querySelector<HTMLElement>('[data-prev]');
+    const next = carousel.querySelector<HTMLElement>('[data-next]');
+    if (!track) return;
+
+    const slideCount = track.children.length;
+
+    function activeIndex() {
+      return Math.round(track!.scrollLeft / track!.clientWidth);
+    }
+
+    function goTo(i: number) {
+      const clamped = (i + slideCount) % slideCount;
+      track!.scrollTo({ left: clamped * track!.clientWidth, behavior: 'smooth' });
+    }
+
+    function syncDots() {
+      const i = activeIndex();
+      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+    }
+
+    prev?.addEventListener('click', () => goTo(activeIndex() - 1));
+    next?.addEventListener('click', () => goTo(activeIndex() + 1));
+    dots.forEach((d, idx) => d.addEventListener('click', () => goTo(idx)));
+    track.addEventListener('scroll', () => {
+      window.clearTimeout((track as any)._t);
+      (track as any)._t = window.setTimeout(syncDots, 80);
+    });
+
+    syncDots();
+  });
+</script>

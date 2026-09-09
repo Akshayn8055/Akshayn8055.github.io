@@ -10,16 +10,16 @@ stack: ["2D LiDAR", "Wheel Encoder Odometry", "Raspberry Pi", "ROS Navigation St
 links: {}
 coverImage: "/media/photos/cover-amr.webp"
 highlightVideo: "/media/highlights/amr.mp4"
+demoVideo:
+  type: youtube
+  src: "https://youtu.be/GpKzsBTLB28"
 gallery:
-  - type: video
-    src: "/media/highlights/amr-mission.mp4"
-    caption: "Autonomous mission execution"
+  - type: youtube
+    src: "https://youtu.be/Qys0j_JvzeU"
   - type: image
     src: "/media/photos/lidar-map.webp"
-    caption: "LiDAR occupancy map of the robotics lab"
   - type: image
     src: "/media/photos/workspace.webp"
-    caption: "Rover build workspace"
 ---
 
 ## Overview

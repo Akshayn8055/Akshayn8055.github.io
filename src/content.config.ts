@@ -18,17 +18,26 @@ const projects = defineCollection({
       .object({
         github: z.string().url().optional(),
         report: z.string().optional(),
-        youtube: z.string().url().optional(),
       })
       .default({}),
+    // Card preview on the homepage grid: a short local muted loop, or a static image.
     coverImage: z.string().optional(),
     highlightVideo: z.string().optional(),
+    // The big video at the top of the project detail page — the real deal, not a trimmed loop.
+    demoVideo: z
+      .object({
+        type: z.enum(['local', 'youtube']),
+        src: z.string(),
+        start: z.number().optional(),
+      })
+      .optional(),
+    // Carousel below the write-up. No per-slide captions by design.
     gallery: z
       .array(
         z.object({
-          type: z.enum(['image', 'video']),
+          type: z.enum(['image', 'video', 'youtube']),
           src: z.string(),
-          caption: z.string().optional(),
+          start: z.number().optional(),
         })
       )
       .default([]),

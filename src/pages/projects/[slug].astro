@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Carousel from '../../components/Carousel.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('projects');
@@ -14,9 +15,11 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const p = entry.data;
 
-function youtubeEmbed(url: string) {
-  const idMatch = url.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
-  return idMatch ? `https://www.youtube.com/embed/${idMatch[1]}` : null;
+function youtubeEmbed(idOrUrl: string, start?: number) {
+  const idMatch = idOrUrl.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
+  const id = idMatch ? idMatch[1] : idOrUrl;
+  const params = start ? `?start=${start}` : '';
+  return `https://www.youtube.com/embed/${id}${params}`;
 }
 ---
 
@@ -33,34 +36,29 @@ function youtubeEmbed(url: string) {
       ))}
     </div>
 
-    <div class="links">
-      {p.links.github && (
-        <a class="neu-btn" href={p.links.github} target="_blank" rel="noopener">GitHub repo</a>
-      )}
-      {p.links.report && (
-        <a class="neu-btn" href={p.links.report} target="_blank" rel="noopener">Read report</a>
-      )}
-      {p.links.youtube && (
-        <a class="neu-btn neu-btn-accent" href={p.links.youtube} target="_blank" rel="noopener">
-          Watch full demo
-        </a>
-      )}
-    </div>
-
-    {p.highlightVideo && (
-      <div class="neu-raised media-frame">
-        <video src={p.highlightVideo} poster={p.coverImage} controls loop muted playsinline></video>
+    {(p.links.github || p.links.report) && (
+      <div class="links">
+        {p.links.github && (
+          <a class="neu-btn" href={p.links.github} target="_blank" rel="noopener">GitHub repo</a>
+        )}
+        {p.links.report && (
+          <a class="neu-btn" href={p.links.report} target="_blank" rel="noopener">Read report</a>
+        )}
       </div>
     )}
 
-    {!p.highlightVideo && p.links.youtube && youtubeEmbed(p.links.youtube) && (
+    {p.demoVideo && (
       <div class="neu-raised media-frame">
-        <iframe
-          src={youtubeEmbed(p.links.youtube)!}
-          title={`${p.title} demo video`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+        {p.demoVideo.type === 'youtube' ? (
+          <iframe
+            src={youtubeEmbed(p.demoVideo.src, p.demoVideo.start)}
+            title={`${p.title} demo video`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        ) : (
+          <video src={p.demoVideo.src} poster={p.coverImage} controls playsinline></video>
+        )}
       </div>
     )}
 
@@ -69,17 +67,8 @@ function youtubeEmbed(url: string) {
     </div>
 
     {p.gallery.length > 0 && (
-      <div class="gallery grid grid-2">
-        {p.gallery.map((g: { type: string; src: string; caption?: string }) => (
-          <figure class="neu-raised gallery-item">
-            {g.type === 'video' ? (
-              <video src={g.src} controls muted loop playsinline></video>
-            ) : (
-              <img src={g.src} alt={g.caption ?? p.title} loading="lazy" />
-            )}
-            {g.caption && <figcaption>{g.caption}</figcaption>}
-          </figure>
-        ))}
+      <div class="gallery">
+        <Carousel slides={p.gallery} />
       </div>
     )}
   </article>
@@ -168,20 +157,9 @@ function youtubeEmbed(url: string) {
     margin-top: 2.5rem;
   }
 
-  .gallery-item {
-    padding: 0.6rem;
-    overflow: hidden;
-  }
-
-  .gallery-item img,
-  .gallery-item video {
-    width: 100%;
-    border-radius: calc(var(--radius-lg) - 0.6rem);
-  }
-
-  .gallery-item figcaption {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    padding: 0.6rem 0.4rem 0.3rem;
+  @media (max-width: 640px) {
+    .content-card {
+      padding: 1.5rem;
+    }
   }
 </style>

@@ -1,7 +1,6 @@
 ---
 title: "Physical AI Agent — Cyberwave SO-101"
-tagline: "Grand-prize-winning Physical AI agent connecting perception, reasoning, and robotic control on the SO-101 arm."
-role: "Idea Track Grand Prize"
+tagline: "A Physical AI agent connecting perception, reasoning, and robotic control, built during Cyberwave's Physical AI Cohort."
 dateRange: "Aug 2026"
 order: 4
 featured: true
@@ -19,4 +18,4 @@ Built and shipped a **Physical AI agent** connecting perception, reasoning, and 
 
 ## Result
 
-Awarded the **Idea Track Grand Prize** at Demo Day, and received a complimentary **SO-101 robotic arm kit** to continue building on the platform.
+Completed the cohort and shipped a working agent on the **SO-101 robotic arm**, presented at Demo Day; received a complimentary SO-101 kit to keep building on the platform.
