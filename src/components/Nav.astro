@@ -1,28 +1,73 @@
 ---
+import { profile } from '../data/profile';
 const links = [
-  { href: '/#about', label: 'About' },
+  { href: '/#flagship', label: 'Flagship' },
   { href: '/#projects', label: 'Projects' },
-  { href: '/#certifications', label: 'Certifications' },
+  { href: '/#about', label: 'About' },
   { href: '/#contact', label: 'Contact' },
 ];
 ---
 
 <header class="nav-wrap">
-  <nav class="neu-raised nav">
-    <a href="/" class="brand">Akshay N</a>
+  <nav class="nav">
+    <a href="/" class="brand">
+      <span class="mark">AN</span>
+      <span class="brand-text">{profile.name}<span class="brand-sub">robotics &amp; ai</span></span>
+    </a>
     <div class="links">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a class="btn btn-primary cv" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé</a>
     </div>
   </nav>
 </header>
 
 <style>
-  .nav-wrap { position: sticky; top: 0.9rem; z-index: 40; display: flex; justify-content: center; padding: 0 1rem; margin-top: 0.9rem; }
-  .nav { width: 100%; max-width: 800px; display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1.5rem; border-radius: var(--radius-pill); }
-  .brand { font-weight: 700; color: #0a4a7a; text-shadow: 0 1px 0 #fff; }
-  .links { display: flex; gap: 1.4rem; font-weight: 600; font-size: 0.92rem; }
-  .links a { color: var(--text-dim); }
-  .links a:hover { color: var(--accent); }
-  @media (max-width: 560px) { .links { gap: 0.6rem 1rem; font-size: 0.78rem; } .nav { padding: 0.7rem 1.1rem; border-radius: var(--radius-lg); } }
-  @media (max-width: 460px) { .nav { flex-direction: column; gap: 0.6rem; } .links { justify-content: center; flex-wrap: wrap; } }
+  .nav-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(7, 9, 12, 0.78);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.7rem; }
+  .mark {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+  .brand-text { display: flex; flex-direction: column; font-weight: 600; line-height: 1.15; }
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .links { display: flex; align-items: center; gap: 1.6rem; font-family: var(--font-mono); font-size: 0.8rem; }
+  .links a:not(.btn) { color: var(--text-dim); transition: color 0.15s; }
+  .links a:not(.btn):hover { color: var(--text); }
+  .cv { padding: 0.5rem 0.9rem; }
+
+  @media (max-width: 720px) {
+    .links a:not(.btn) { display: none; }
+    .nav { padding: 0.7rem 1.1rem; }
+  }
 </style>

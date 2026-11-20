@@ -24,31 +24,30 @@ function youtubeEmbed(idOrUrl: string, start?: number) {
 ---
 
 <BaseLayout title={p.title} description={p.tagline}>
-  <article class="section project-detail">
-    <a class="back" href="/#projects">← Back to projects</a>
-    <p class="section-eyebrow">{p.dateRange}</p>
-    <h1 class="section-title">{p.title}</h1>
-    <p class="tagline">{p.tagline}</p>
+  <article class="section detail">
+    <a class="back mono" href="/#projects">← Back to all projects</a>
 
-    <div class="tags">
-      {p.tags.map((t: string) => (
-        <span class="chip">{t}</span>
-      ))}
-    </div>
-
-    {(p.links.github || p.links.report) && (
-      <div class="links">
-        {p.links.github && (
-          <a class="neu-btn" href={p.links.github} target="_blank" rel="noopener">GitHub repo</a>
-        )}
-        {p.links.report && (
-          <a class="neu-btn" href={p.links.report} target="_blank" rel="noopener">Read report</a>
-        )}
+    <header class="head">
+      <p class="section-eyebrow">{p.dateRange}{p.role && ` · ${p.role}`}</p>
+      <h1>{p.title}</h1>
+      <p class="tagline">{p.tagline}</p>
+      <div class="tags">
+        {p.tags.map((t: string) => <span class="tag">{t}</span>)}
       </div>
-    )}
+      {(p.links.github || p.links.report) && (
+        <div class="links">
+          {p.links.github && (
+            <a class="btn" href={p.links.github} target="_blank" rel="noopener">GitHub repo ↗</a>
+          )}
+          {p.links.report && (
+            <a class="btn btn-primary" href={p.links.report} target="_blank" rel="noopener">Read the design report ↗</a>
+          )}
+        </div>
+      )}
+    </header>
 
-    {p.demoVideo && (
-      <div class="neu-raised media-frame">
+    {p.demoVideo ? (
+      <div class="media hud">
         {p.demoVideo.type === 'youtube' ? (
           <iframe
             src={youtubeEmbed(p.demoVideo.src, p.demoVideo.start)}
@@ -60,14 +59,31 @@ function youtubeEmbed(idOrUrl: string, start?: number) {
           <video src={p.demoVideo.src} poster={p.coverImage} controls playsinline></video>
         )}
       </div>
-    )}
+    ) : p.highlightVideo ? (
+      <div class="media hud">
+        <video src={p.highlightVideo} poster={p.coverImage} muted loop autoplay playsinline controls></video>
+      </div>
+    ) : p.coverImage ? (
+      <div class="media hud"><img src={p.coverImage} alt={p.title} /></div>
+    ) : null}
 
-    <div class="neu-raised content-card">
-      <Content />
+    <div class="layout">
+      <div class="content">
+        <Content />
+      </div>
+      {p.stack.length > 0 && (
+        <aside class="panel stack">
+          <span class="mono k">Stack</span>
+          <ul>
+            {p.stack.map((s: string) => <li>{s}</li>)}
+          </ul>
+        </aside>
+      )}
     </div>
 
     {p.gallery.length > 0 && (
       <div class="gallery">
+        <p class="section-eyebrow">Gallery</p>
         <Carousel slides={p.gallery} />
       </div>
     )}
@@ -75,91 +91,54 @@ function youtubeEmbed(idOrUrl: string, start?: number) {
 </BaseLayout>
 
 <style>
-  .project-detail {
-    max-width: 860px;
-  }
+  .detail { max-width: 980px; padding-top: 3rem; }
+  .back { display: inline-block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 2rem; }
+  .back:hover { color: var(--accent); }
+  .head h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; }
+  .tagline { font-size: 1.15rem; margin: 1rem 0 1.25rem; max-width: 720px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.75rem; }
 
-  .back {
-    display: inline-block;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dim);
-  }
-
-  .back:hover {
-    color: var(--accent);
-  }
-
-  .tagline {
-    font-size: 1.1rem;
-    margin: 0.75rem 0 1.25rem;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .media-frame {
-    padding: 0.7rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .media-frame video {
-    width: 100%;
-    border-radius: calc(var(--radius-lg) - 0.7rem);
-  }
-
-  .media-frame iframe {
+  .media { margin-top: 2.75rem; border-radius: var(--radius-md); }
+  .media iframe,
+  .media video,
+  .media img {
     width: 100%;
     aspect-ratio: 16/9;
-    border: none;
-    border-radius: calc(var(--radius-lg) - 0.7rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: #000;
+    object-fit: cover;
   }
 
-  .content-card {
-    padding: 2.5rem;
-    line-height: 1.75;
+  .layout { display: grid; grid-template-columns: 1fr 260px; gap: 3rem; margin-top: 3rem; align-items: start; }
+  .content { line-height: 1.75; }
+  .content :global(h2) {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 2.25rem 0 0.8rem;
   }
+  .content :global(h2:first-child) { margin-top: 0; }
+  .content :global(p) { margin: 0 0 1rem; font-size: 1.02rem; }
+  .content :global(strong) { color: var(--text); }
+  .content :global(ul) { color: var(--text-dim); padding-left: 1.2rem; }
+  .content :global(li) { margin-bottom: 0.6rem; }
+  .content :global(li::marker) { color: var(--accent); }
 
-  .content-card :global(h2) {
-    font-size: 1.3rem;
-    margin: 1.75rem 0 0.75rem;
-  }
+  .stack { padding: 1.25rem 1.4rem; position: sticky; top: 5.5rem; }
+  .k { font-size: 0.7rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; }
+  .stack ul { list-style: none; margin: 0.8rem 0 0; padding: 0; }
+  .stack li { font-size: 0.9rem; padding: 0.55rem 0; border-bottom: 1px dashed var(--line); }
+  .stack li:last-child { border-bottom: 0; }
 
-  .content-card :global(h2:first-child) {
-    margin-top: 0;
-  }
+  .gallery { margin-top: 4rem; }
 
-  .content-card :global(p) {
-    margin: 0 0 1rem;
-  }
-
-  .content-card :global(ul) {
-    color: var(--text-dim);
-    padding-left: 1.3rem;
-  }
-
-  .content-card :global(li) {
-    margin-bottom: 0.5rem;
-  }
-
-  .gallery {
-    margin-top: 2.5rem;
-  }
-
-  @media (max-width: 640px) {
-    .content-card {
-      padding: 1.5rem;
-    }
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: 1fr; gap: 2rem; }
+    .stack { position: static; }
   }
 </style>

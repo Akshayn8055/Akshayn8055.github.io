@@ -3,25 +3,55 @@ import { profile } from '../data/profile';
 const year = new Date().getFullYear();
 ---
 
-<footer class="section" id="contact">
-  <div class="neu-raised footer-card">
-    <div>
-      <p class="section-eyebrow">Get in touch</p>
-      <h2 class="section-title">Let's build something autonomous.</h2>
-      <p>Open to robotics, AI, and UAV engineering opportunities.</p>
-    </div>
-    <div class="footer-actions">
-      <a class="neu-btn neu-btn-accent" href={`mailto:${profile.email}`}>Email me</a>
-      <a class="neu-btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-      <a class="neu-btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+<footer class="section footer" id="contact">
+  <div class="panel cta">
+    <p class="section-eyebrow">05 — Contact</p>
+    <h2 class="cta-title">Let's build something<br /><span>autonomous.</span></h2>
+    <p class="cta-sub">Open to robotics, AI and UAV engineering roles, research positions and collaborations.</p>
+    <a class="email mono" href={`mailto:${profile.email}`}>{profile.email} →</a>
+    <div class="actions">
+      <a class="btn btn-primary" href={`mailto:${profile.email}`}>Email me</a>
+      <a class="btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé (PDF)</a>
     </div>
   </div>
-  <p class="fine-print">© {year} {profile.name}. Built with Astro, hosted on GitHub Pages.</p>
+  <div class="fine mono">
+    <span>© {year} {profile.name}</span>
+    <span>{profile.location}</span>
+  </div>
 </footer>
 
 <style>
-  .footer-card { display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: space-between; padding: 2.5rem; }
-  .footer-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .fine-print { text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #0f3a58; }
-  @media (max-width: 640px) { .footer-card { padding: 1.75rem; } }
+  .footer { padding-bottom: 2.5rem; }
+  .cta {
+    padding: 3.5rem;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 80% at 100% 100%, rgba(255, 122, 26, 0.14), transparent 60%),
+      linear-gradient(180deg, var(--panel-2), var(--panel));
+  }
+  .cta-title { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.03em; }
+  .cta-title span { color: var(--accent); }
+  .cta-sub { max-width: 520px; margin: 1.1rem 0 1.5rem; }
+  .email {
+    display: inline-block;
+    font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+    color: var(--cyan);
+    border-bottom: 1px solid transparent;
+    word-break: break-all;
+  }
+  .email:hover { border-bottom-color: var(--cyan); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2rem; }
+  .fine {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    font-size: 0.72rem;
+    color: var(--text-faint);
+  }
+  @media (max-width: 640px) {
+    .cta { padding: 2rem 1.4rem; }
+  }
 </style>

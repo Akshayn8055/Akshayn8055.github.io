@@ -2,94 +2,61 @@
 import { getCollection } from 'astro:content';
 
 const entries = await getCollection('certs');
-const certs = entries
-  .map((e) => ({ slug: e.id, ...e.data }))
-  .sort((a, b) => a.order - b.order);
+const certs = entries.map((e) => ({ slug: e.id, ...e.data })).sort((a, b) => a.order - b.order);
 ---
 
 <section class="section" id="certifications">
-  <p class="section-eyebrow">Recognition</p>
-  <h2 class="section-title">Certifications & Achievements</h2>
-  <div class="grid grid-3 cert-grid">
-    {certs.map((c) => (
-      <div class="neu-raised cert-card">
+  <div class="section-head">
+    <div>
+      <p class="section-eyebrow">04 — Recognition</p>
+      <h2 class="section-title">Certifications &amp; achievements</h2>
+    </div>
+  </div>
+
+  <div class="grid">
+    {certs.map((c, i) => (
+      <a
+        class:list={['panel', 'cert', { top: i === 0 }]}
+        href={c.pdf ?? c.link ?? c.image}
+        target="_blank"
+        rel="noopener"
+      >
         {c.image && (
-          <div class="cert-thumb">
+          <div class="thumb">
             <img src={c.image} alt={c.title} loading="lazy" />
           </div>
         )}
-        <div class="cert-body">
+        <div class="body">
+          <span class="mono issuer">{c.issuer} · {c.date}</span>
           <h3>{c.title}</h3>
-          <p class="issuer">{c.issuer} · {c.date}</p>
-          {c.description && <p class="desc">{c.description}</p>}
-          <div class="cert-links">
-            {c.pdf && (
-              <a class="neu-btn neu-btn-accent small" href={c.pdf} target="_blank" rel="noopener">
-                View certificate
-              </a>
-            )}
-            {c.link && !c.pdf && (
-              <a class="neu-btn small" href={c.link} target="_blank" rel="noopener">
-                Learn more
-              </a>
-            )}
-          </div>
+          {c.description && <p>{c.description}</p>}
+          <span class="mono view">View certificate ↗</span>
         </div>
-      </div>
+      </a>
     ))}
   </div>
 </section>
 
 <style>
-  .cert-grid {
-    margin-top: 2rem;
-  }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .cert { display: flex; flex-direction: column; overflow: hidden; transition: border-color 0.2s ease; }
+  .cert:hover { border-color: var(--accent); }
+  .cert.top { border-color: rgba(255, 122, 26, 0.45); }
+  .thumb { height: 200px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; }
+  .body { display: flex; flex-direction: column; flex: 1; padding: 1.25rem 1.3rem 1.3rem; }
+  .issuer { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+  .body h3 { font-size: 1.05rem; line-height: 1.3; margin: 0.5rem 0 0; }
+  .body p { font-size: 0.88rem; margin: 0.6rem 0 1rem; }
+  .view { font-size: 0.75rem; color: var(--text-dim); margin-top: auto; }
 
-  .cert-card {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 0.6rem;
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: 1fr; }
+    .cert { flex-direction: row; }
+    .thumb { width: 38%; height: auto; min-height: 160px; flex-shrink: 0; }
   }
-
-  .cert-thumb {
-    border-radius: calc(var(--radius-lg) - 0.6rem);
-    overflow: hidden;
-    height: 240px;
-    background: var(--shadow-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .cert-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .cert-body {
-    padding: 1.4rem 1rem 1.1rem;
-  }
-
-  .cert-body h3 {
-    font-size: 1.05rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .issuer {
-    font-size: 0.82rem;
-    color: var(--accent);
-    margin: 0 0 0.6rem;
-  }
-
-  .desc {
-    font-size: 0.88rem;
-    margin: 0 0 1rem;
-  }
-
-  .small {
-    padding: 0.55rem 1.2rem;
-    font-size: 0.85rem;
+  @media (max-width: 520px) {
+    .cert { flex-direction: column; }
+    .thumb { width: 100%; height: 180px; }
   }
 </style>

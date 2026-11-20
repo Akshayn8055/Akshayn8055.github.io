@@ -1,0 +1,127 @@
+---
+const specs = [
+  { k: 'Role', v: 'Team Lead · Team WINGMEN' },
+  { k: 'Compute', v: 'NVIDIA Jetson Orin Nano' },
+  { k: 'Perception', v: 'Intel RealSense D455 · VIO' },
+  { k: 'Autonomy', v: 'ArduCopter via MAVROS / ROS' },
+  { k: 'Airframe', v: 'Custom carbon fibre' },
+  { k: 'Result', v: 'Top 20 of ~590 teams', hi: true },
+];
+
+const capabilities = [
+  'GPS-denied waypoint navigation',
+  'Real-time object & feature detection',
+  'Precision autonomous landing on a pad',
+  'Telemetry to base station + wireless charging',
+];
+
+const shots = [
+  { src: '/media/photos/ascend-panel-presentation.webp', alt: 'Presenting ASCEND to the ISRO evaluation panel', label: 'ISRO PANEL REVIEW' },
+  { src: '/media/photos/ascend-ground-rig.webp', alt: 'ASCEND UAV on the ground test rig', label: 'GROUND RIG' },
+  { src: '/media/photos/ascend-gui-demo.webp', alt: 'Ground-station GUI demo for ASCEND', label: 'GROUND STATION' },
+  { src: '/media/photos/ascend-team-wingmen.webp', alt: 'Team WINGMEN with the ASCEND UAV', label: 'TEAM WINGMEN' },
+];
+---
+
+<section class="section" id="flagship">
+  <div class="section-head">
+    <div>
+      <p class="section-eyebrow">01 — Flagship mission</p>
+      <h2 class="section-title">ASCEND: an autonomous UAV for ISRO</h2>
+    </div>
+    <span class="section-meta">DEC 2025 – JUL 2026</span>
+  </div>
+
+  <div class="flagship">
+    <div class="copy">
+      <p class="lead">
+        I led a team to design, build and fly a fully autonomous drone for <strong>ISRO's Robotics Challenge (IRoC-U 2026)</strong>.
+        It navigates without GPS, using visual-inertial odometry, and lands itself on a target pad. That kind of mission is
+        a rehearsal for planetary exploration. We were selected as one of
+        <strong>20 national finalists from ~590 teams</strong> and flew the final field round in front of senior ISRO
+        scientists at URSC, Bengaluru.
+      </p>
+
+      <ul class="caps">
+        {capabilities.map((c) => <li>{c}</li>)}
+      </ul>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/projects/ascend-uav/">Read the case study →</a>
+        <a class="btn" href="https://youtu.be/rNrGeEh-YAY" target="_blank" rel="noopener">▶ Watch it fly</a>
+        <a class="btn" href="/media/reports/ASCEND_Design_Report.pdf" target="_blank" rel="noopener">Design report (PDF)</a>
+      </div>
+    </div>
+
+    <dl class="panel specs">
+      <p class="specs-head mono"><span class="status">Mission complete</span><span>SPEC SHEET</span></p>
+      {specs.map((s) => (
+        <div class="row">
+          <dt>{s.k}</dt>
+          <dd class:list={[{ hi: s.hi }]}>{s.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <div class="shots">
+    {shots.map((s) => (
+      <figure class="shot">
+        <img src={s.src} alt={s.alt} loading="lazy" />
+        <figcaption class="mono">{s.label}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .flagship { display: grid; grid-template-columns: 1.35fr 1fr; gap: 3rem; align-items: start; }
+  .lead { font-size: 1.1rem; color: var(--text-dim); margin: 0; }
+  .lead strong { color: var(--text); font-weight: 600; }
+  .caps { list-style: none; padding: 0; margin: 1.75rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem; }
+  .caps li { position: relative; padding-left: 1.3rem; color: var(--text); font-size: 0.95rem; line-height: 1.45; }
+  .caps li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2rem; }
+
+  .specs { margin: 0; padding: 0.4rem 1.4rem 0.8rem; }
+  .specs-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    padding: 0.9rem 0;
+    margin: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px dashed var(--line); }
+  .row:last-child { border-bottom: 0; }
+  .row dt { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+  .row dd { margin: 0; font-size: 0.92rem; text-align: right; }
+  .row dd.hi { color: var(--accent); font-weight: 700; }
+
+  .shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3rem; }
+  .shot { position: relative; margin: 0; aspect-ratio: 4/3; overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--line); }
+  .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .shot:hover img { transform: scale(1.05); }
+  .shot figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.5rem 0.75rem 0.6rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  }
+
+  @media (max-width: 900px) {
+    .flagship { grid-template-columns: 1fr; gap: 2rem; }
+    .shots { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .caps { grid-template-columns: 1fr; }
+    .actions .btn { flex: 1 1 100%; justify-content: center; }
+  }
+</style>
