@@ -46,7 +46,7 @@ const { slug, title, tagline, dateRange, tags, coverImage, highlightVideo } = As
   }
 
   .card:hover {
-    transform: translateY(-4px);
+    transform: translate(-2px,-2px);
   }
 
   .media {
@@ -76,9 +76,9 @@ const { slug, title, tagline, dateRange, tags, coverImage, highlightVideo } = As
     content: '';
     width: 46px;
     height: 46px;
-    border-radius: 50%;
+    border-radius: 0;
     background: var(--bg);
-    box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+    box-shadow: var(--bevel-out);
   }
 
   .body {
