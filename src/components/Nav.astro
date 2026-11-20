@@ -1,73 +1,95 @@
 ---
 import { profile } from '../data/profile';
 const links = [
-  { href: '/#flagship', label: 'Flagship' },
-  { href: '/#projects', label: 'Projects' },
   { href: '/#about', label: 'About' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#skills', label: 'Skills' },
   { href: '/#contact', label: 'Contact' },
 ];
 ---
 
-<header class="nav-wrap">
-  <nav class="nav">
-    <a href="/" class="brand">
-      <span class="mark">AN</span>
-      <span class="brand-text">{profile.name}<span class="brand-sub">robotics &amp; ai</span></span>
-    </a>
-    <div class="links">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
-      <a class="btn btn-primary cv" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé</a>
-    </div>
+<header class="nav" data-nav>
+  <a href="/" class="brand">
+    <span class="mark">AN</span>
+    <span class="brand-text">{profile.name}</span>
+  </a>
+  <nav class="links" aria-label="Sections">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
   </nav>
+  <a class="resume" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé</a>
 </header>
 
 <style>
-  .nav-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    background: rgba(7, 9, 12, 0.78);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--line);
-  }
   .nav {
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0.8rem 1.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    padding: 20px clamp(20px, 5vw, 56px);
+    border-bottom: 1px solid transparent;
+    transition: padding 0.4s var(--ease), border-color 0.4s;
   }
-  .brand { display: flex; align-items: center; gap: 0.7rem; }
+  .nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(18, 18, 18, 0.8);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .nav.scrolled {
+    padding-top: 13px;
+    padding-bottom: 13px;
+    border-bottom-color: var(--line);
+  }
+  .nav.scrolled::before { opacity: 1; }
+
+  .brand { display: flex; align-items: center; gap: 11px; }
   .mark {
     display: grid;
     place-items: center;
     width: 34px;
     height: 34px;
-    font-family: var(--font-mono);
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--accent-ink);
     font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
   }
-  .brand-text { display: flex; flex-direction: column; font-weight: 600; line-height: 1.15; }
-  .brand-sub {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .links { display: flex; align-items: center; gap: 1.6rem; font-family: var(--font-mono); font-size: 0.8rem; }
-  .links a:not(.btn) { color: var(--text-dim); transition: color 0.15s; }
-  .links a:not(.btn):hover { color: var(--text); }
-  .cv { padding: 0.5rem 0.9rem; }
+  .brand-text { font-size: 1.12rem; font-weight: 500; }
 
-  @media (max-width: 720px) {
-    .links a:not(.btn) { display: none; }
-    .nav { padding: 0.7rem 1.1rem; }
+  .links { display: flex; gap: 30px; }
+  .links a { font-size: 0.9rem; font-weight: 500; color: var(--muted); transition: color 0.24s var(--ease); }
+  .links a:hover { color: var(--text); }
+
+  .resume {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .resume:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .links { display: none; }
   }
 </style>
+
+<script>
+  const nav = document.querySelector('[data-nav]');
+  const onScroll = () => nav?.classList.toggle('scrolled', window.scrollY > 24);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

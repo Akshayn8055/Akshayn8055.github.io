@@ -1,0 +1,43 @@
+---
+import { profile } from '../data/profile';
+
+// One timeline entry per role, newest first.
+const items = profile.experience.flatMap((exp) =>
+  exp.roles.map((r, i) => ({ org: exp.org, title: r.title, dateRange: r.dateRange, points: i === 0 ? exp.points : [] }))
+);
+---
+
+<section class="section" id="experience">
+  <div class="section-head">
+    <h2 class="section-title">Experience</h2>
+  </div>
+
+  <ol class="timeline">
+    {items.map((it) => (
+      <li class="item">
+        <span class="dot" aria-hidden="true"></span>
+        <p class="time mono">{it.dateRange}</p>
+        <h3>{it.title}</h3>
+        <span class="org">{it.org}</span>
+        {it.points.map((pt) => {
+          const [head, ...rest] = pt.split(': ');
+          return rest.length ? <p><strong>{head}.</strong> {rest.join(': ')}</p> : <p>{pt}</p>;
+        })}
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .timeline { position: relative; list-style: none; margin: 0; padding: 0 0 0 28px; max-width: 860px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; border-left: 1.5px dashed var(--line-2); }
+  .item { position: relative; padding: 0 0 44px 34px; }
+  .item:last-child { padding-bottom: 0; }
+  .dot { position: absolute; left: -28px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .item:first-child .dot { background: var(--accent); }
+  .time { font-size: 0.8rem; color: var(--accent); margin-bottom: 6px; }
+  .item h3 { font-size: 1.32rem; letter-spacing: -0.01em; line-height: 1.25; }
+  .org { display: block; color: var(--text); font-weight: 500; font-size: 0.92rem; margin: 4px 0 10px; opacity: 0.85; }
+  .item p:not(.time) { color: var(--muted); font-size: 0.95rem; max-width: 68ch; margin-bottom: 10px; }
+  .item strong { color: var(--text); font-weight: 600; }
+</style>

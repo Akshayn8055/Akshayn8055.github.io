@@ -1,133 +1,99 @@
 ---
 import { profile } from '../data/profile';
-
-const stats = [
-  { value: 'Top 20', label: 'of ~590 teams · ISRO IRoC-U 2026' },
-  { value: 'Team Lead', label: 'ASCEND autonomous UAV' },
-  { value: '3 domains', label: 'aerial · ground · manipulation' },
-  { value: 'RA', label: 'COE Robotics & Automation' },
-];
 ---
 
-<section class="hero section">
-  <div class="hero-grid">
-    <div class="hero-copy">
-      <p class="status">Open to opportunities · {profile.location}</p>
-      <h1 class="hero-title">
-        I build robots<br />that <span class="hl">find their<br />own way.</span>
-      </h1>
-      <p class="hero-tagline">
-        {profile.name} — {profile.role}. GPS-denied UAVs, SLAM rovers and physical AI agents, designed,
-        built and tested end to end.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#flagship">View flagship project →</a>
-        <a class="btn" href="#projects">All projects</a>
-      </div>
-    </div>
-
-    <a class="hero-media hud" href="/projects/ascend-uav/" aria-label="ASCEND UAV project">
-      <img src="/media/photos/ascend-flight-test.webp" alt="ASCEND autonomous UAV during a flight test" />
-      <div class="overlay mono">
-        <span class="tl">CAM_01 // ASCEND</span>
-        <span class="tr"><span class="rec"></span>REC</span>
-        <span class="bl">VIO · GPS-DENIED · AUTONOMOUS</span>
-      </div>
-      <div class="reticle" aria-hidden="true"></div>
-    </a>
+<section class="hero">
+  <div class="photo" aria-hidden="true">
+    <img src="/media/photos/drone.webp" alt="" />
   </div>
+  <div class="scrim" aria-hidden="true"></div>
 
-  <dl class="stats">
-    {stats.map((s) => (
-      <div class="stat">
-        <dt>{s.value}</dt>
-        <dd>{s.label}</dd>
-      </div>
-    ))}
-  </dl>
+  <div class="inner">
+    <p class="status"><span class="pulse"></span>Open to robotics &amp; AI roles · {profile.location}</p>
+    <h1 class="title">{profile.name}</h1>
+    <p class="lede">
+      Robotics &amp; AI engineer. I led Team WINGMEN to the national finals of <strong>ISRO's Robotics Challenge (IRoC-U 2026)</strong>: top 20 of ~590 teams, with a drone that <em>flies and lands without GPS</em>.
+      These days I build GPS-denied rovers at Alliance University's robotics lab.
+    </p>
+    <div class="cta">
+      <a class="btn btn-solid" href="#projects">See my work</a>
+      <a class="btn btn-ghost" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé (PDF)</a>
+    </div>
+    <p class="meta mono">
+      <a href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+      <span>/</span>
+      <a href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <span>/</span>
+      <a href={`mailto:${profile.email}`}>Email</a>
+    </p>
+  </div>
 </section>
 
 <style>
-  .hero { padding-top: 4.5rem; padding-bottom: 3rem; }
-  .hero-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 3rem; align-items: center; }
-  .hero-title {
-    font-size: clamp(2.4rem, 4.9vw, 4rem);
-    font-weight: 700;
-    margin: 1.25rem 0 1.4rem;
-    letter-spacing: -0.035em;
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 120px clamp(20px, 5vw, 56px) 80px;
+    overflow: hidden;
+    background: #111;
   }
-  .hl { color: var(--accent); }
-  .hero-tagline { font-size: 1.12rem; max-width: 520px; margin: 0; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-
-  .hero-media { display: block; aspect-ratio: 4/3; border-radius: var(--radius-md); }
-  .hero-media img {
+  .photo { position: absolute; inset: 0 0 0 28%; z-index: 0; }
+  .photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-md);
-    filter: saturate(0.9) contrast(1.05);
+    object-position: 45% center;
+    filter: brightness(0.7) contrast(1.1) saturate(0.85);
   }
-  .overlay {
+  .scrim {
     position: absolute;
     inset: 0;
-    border-radius: var(--radius-md);
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 30%, transparent 65%, rgba(0, 0, 0, 0.6));
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: #fff;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, #111 0%, #111 28%, rgba(17, 17, 17, 0.75) 40%, rgba(17, 17, 17, 0.15) 65%, transparent 80%),
+      linear-gradient(0deg, var(--bg) 0%, rgba(18, 18, 18, 0.5) 14%, transparent 40%),
+      linear-gradient(180deg, rgba(17, 17, 17, 0.7) 0%, transparent 22%);
   }
-  .overlay span { position: absolute; }
-  .overlay .rec { position: static; }
-  .tl { top: 0.9rem; left: 1rem; }
-  .tr { top: 0.9rem; right: 1rem; display: flex; align-items: center; gap: 0.4rem; color: #ff6b6b; }
-  .bl { bottom: 0.9rem; left: 1rem; color: var(--cyan); }
-  .rec { width: 8px; height: 8px; border-radius: 50%; background: #ff3b3b; animation: pulse 1.2s infinite; }
-  .reticle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 64px;
-    height: 64px;
-    translate: -50% -50%;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    border-radius: 50%;
-    transition: transform 0.3s ease;
+  .inner { position: relative; z-index: 2; max-width: 760px; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--muted);
   }
-  .reticle::before,
-  .reticle::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.45); }
-  .reticle::before { left: 50%; top: -12px; bottom: -12px; width: 1px; }
-  .reticle::after { top: 50%; left: -12px; right: -12px; height: 1px; }
-  .hero-media:hover .reticle { transform: scale(1.25); }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: strobe 2.4s steps(1, end) infinite; }
+  @keyframes strobe {
+    0%, 9% { opacity: 1; }
+    4%, 13%, 100% { opacity: 0.25; }
+  }
+  .title {
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    font-size: clamp(3rem, 8vw, 5.6rem);
+    line-height: 1;
+    margin-bottom: 28px;
+  }
+  .lede { max-width: 600px; font-size: clamp(1rem, 2vw, 1.18rem); color: var(--muted); margin-bottom: 34px; }
+  .lede strong { color: var(--text); font-weight: 600; }
+  .lede em { font-style: normal; color: var(--accent); }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 34px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: var(--faint); }
+  .meta a { color: var(--muted); transition: color 0.25s; }
+  .meta a:hover { color: var(--accent); }
 
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin: 4rem 0 0;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    background: rgba(15, 20, 27, 0.6);
-  }
-  .stat { padding: 1.3rem 1.4rem; border-left: 1px solid var(--line); }
-  .stat:first-child { border-left: 0; }
-  .stat dt { font-size: 1.5rem; font-weight: 700; color: var(--text); }
-  .stat:first-child dt { color: var(--accent); }
-  .stat dd {
-    margin: 0.3rem 0 0;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--text-faint);
-    line-height: 1.5;
-  }
-
-  @media (max-width: 880px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .stat:nth-child(3) { border-left: 0; }
-    .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
-  }
-  @media (max-width: 480px) {
-    .hero { padding-top: 2.5rem; }
-    .hero-actions .btn { flex: 1 1 100%; justify-content: center; }
+  @media (max-width: 720px) {
+    .hero { align-items: flex-end; padding-bottom: 56px; }
+    .photo { inset: 0 0 45% 0; }
+    .photo img { object-position: center; }
+    .scrim {
+      background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 46%, rgba(18, 18, 18, 0.6) 62%, transparent 85%),
+        linear-gradient(180deg, rgba(17, 17, 17, 0.7) 0%, transparent 20%);
+    }
   }
 </style>

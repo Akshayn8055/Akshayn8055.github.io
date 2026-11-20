@@ -1,98 +1,90 @@
 ---
 import { profile } from '../data/profile';
-
-const skillGroups = Object.entries(profile.skills).filter(([k]) => k !== 'Soft Skills' && k !== 'Tools');
 const edu = profile.education[0];
 ---
 
 <section class="section" id="about">
   <div class="section-head">
-    <div>
-      <p class="section-eyebrow">03 — Operator profile</p>
-      <h2 class="section-title">About me</h2>
-    </div>
+    <h2 class="section-title">About</h2>
   </div>
 
-  <div class="about-grid">
-    <div class="bio">
-      <p class="bio-text">{profile.bio}</p>
-      <div class="panel edu">
-        <span class="mono k">Education</span>
-        <strong>{edu.school}</strong>
-        <span class="dim">{edu.degree}</span>
-        <span class="mono date">{edu.dateRange}</span>
-      </div>
+  <div class="grid">
+    <figure class="media">
+      <img src="/media/photos/ascend-gui-demo.webp" alt="Team WINGMEN demonstrating the ASCEND ground station at URSC, Bengaluru" loading="lazy" />
+      <figcaption>
+        <span class="k">Top 20</span>
+        <span class="v">of ~590 teams<br />ISRO IRoC-U 2026</span>
+      </figcaption>
+    </figure>
+
+    <div class="body">
+      <p class="lead">
+        I'm a robotics engineer from Bengaluru, trained in CS with a focus on AI &amp; ML, and I like building
+        robots that have to work outside a simulator.
+      </p>
+      <p>
+        Most of my time goes into autonomy for things that move: a drone that navigates with visual-inertial
+        odometry instead of GPS, a LiDAR rover that maps a room it has never seen, and robot arms driven by
+        vision and, more recently, LLM agents. I enjoy the whole loop, from fabricating carbon fibre frames and
+        wiring a Jetson to tuning PID loops and writing the ROS nodes.
+      </p>
+      <p>
+        I'm a Research Assistant at the <strong>Center of Excellence in Robotics &amp; Automation</strong> at
+        Alliance University and Chief of the university's Robotics &amp; Automation Club, where I run
+        workshops on UAVs and autonomous navigation.
+      </p>
+      <a class="honor" href="/media/certs/isro-irocu-cert.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M8.5 14 7 22l5-3 5 3-1.5-8"></path></svg>
+        <span><strong>Top 20 National Finalist</strong>, ISRO Robotics Challenge (IRoC-U 2026), URSC Bengaluru <span class="mono verify">certificate ↗</span></span>
+      </a>
+      <p class="edu mono">{edu.degree} · {edu.dateRange}</p>
     </div>
-
-    <ol class="timeline">
-      {profile.experience.map((exp) => (
-        <li>
-          <h3>{exp.org}</h3>
-          <div class="roles">
-            {exp.roles.map((r) => (
-              <span class="role mono"><b>{r.title}</b> · {r.dateRange}</span>
-            ))}
-          </div>
-          <ul>
-            {exp.points.map((pt) => {
-              const [head, ...rest] = pt.split(': ');
-              return rest.length ? <li><strong>{head}:</strong> {rest.join(': ')}</li> : <li>{pt}</li>;
-            })}
-          </ul>
-        </li>
-      ))}
-    </ol>
-  </div>
-
-  <div class="skills">
-    {skillGroups.map(([group, items]) => (
-      <div class="skill-row">
-        <span class="mono group">{group}</span>
-        <div class="items">
-          {items.map((s: string) => <span class="tag">{s}</span>)}
-        </div>
-      </div>
-    ))}
   </div>
 </section>
 
 <style>
-  .about-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 3.5rem; }
-  .bio-text { font-size: 1.05rem; margin: 0 0 1.75rem; }
-  .edu { display: flex; flex-direction: column; gap: 0.3rem; padding: 1.25rem 1.4rem; }
-  .k { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
-  .dim { color: var(--text-dim); font-size: 0.92rem; }
-  .date { font-size: 0.75rem; color: var(--text-faint); margin-top: 0.3rem; }
-
-  .timeline { list-style: none; margin: 0; padding: 0 0 0 1.5rem; border-left: 1px solid var(--line-2); }
-  .timeline > li { position: relative; padding-bottom: 2.25rem; }
-  .timeline > li:last-child { padding-bottom: 0; }
-  .timeline > li::before {
-    content: '';
+  .grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+  .media { position: relative; margin: 0; border-radius: var(--radius); overflow: hidden; background: var(--bg-2); }
+  .media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: 62% center; }
+  .media figcaption {
     position: absolute;
-    left: calc(-1.5rem - 5px);
-    top: 0.35rem;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 4px var(--bg), 0 0 12px var(--accent);
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(18, 18, 18, 0.72);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
-  .timeline h3 { font-size: 1.1rem; line-height: 1.3; }
-  .roles { display: flex; flex-direction: column; gap: 0.25rem; margin: 0.6rem 0 0.8rem; }
-  .role { font-size: 0.75rem; color: var(--text-faint); }
-  .role b { color: var(--cyan); font-weight: 500; }
-  .timeline ul { margin: 0; padding-left: 1.1rem; color: var(--text-dim); font-size: 0.92rem; line-height: 1.6; }
-  .timeline ul li { margin-bottom: 0.5rem; }
-  .timeline ul strong { color: var(--text); font-weight: 600; }
+  .k { font-weight: 600; font-size: 1.4rem; color: var(--accent); }
+  .v { font-size: 0.76rem; color: var(--muted); line-height: 1.35; }
 
-  .skills { margin-top: 3.5rem; border-top: 1px solid var(--line); }
-  .skill-row { display: grid; grid-template-columns: 200px 1fr; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
-  .group { font-size: 0.75rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; padding-top: 0.25rem; }
-  .items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .body p { color: var(--muted); margin-bottom: 20px; font-size: 1.04rem; }
+  .body .lead { font-size: 1.22rem; color: var(--text); font-weight: 500; }
+  .body strong { color: var(--text); font-weight: 600; }
+  .honor {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 10px 0 20px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--gold);
+    font-size: 0.96rem;
+    line-height: 1.55;
+    transition: color 0.25s;
+  }
+  .honor:hover { color: var(--accent); }
+  .honor svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .honor strong { color: inherit; font-weight: 700; }
+  .verify { font-size: 0.8em; opacity: 0.8; }
+  .body .edu { font-size: 0.82rem; color: var(--faint); margin: 0; }
 
-  @media (max-width: 880px) {
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .skill-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  @media (max-width: 820px) {
+    .grid { grid-template-columns: 1fr; }
+    .media img { aspect-ratio: 4/3; }
   }
 </style>

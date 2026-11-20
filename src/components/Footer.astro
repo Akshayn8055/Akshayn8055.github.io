@@ -3,55 +3,57 @@ import { profile } from '../data/profile';
 const year = new Date().getFullYear();
 ---
 
-<footer class="section footer" id="contact">
-  <div class="panel cta">
-    <p class="section-eyebrow">05 — Contact</p>
-    <h2 class="cta-title">Let's build something<br /><span>autonomous.</span></h2>
-    <p class="cta-sub">Open to robotics, AI and UAV engineering roles, research positions and collaborations.</p>
-    <a class="email mono" href={`mailto:${profile.email}`}>{profile.email} →</a>
-    <div class="actions">
-      <a class="btn btn-primary" href={`mailto:${profile.email}`}>Email me</a>
-      <a class="btn" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
-      <a class="btn" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé (PDF)</a>
-    </div>
+<section class="section contact" id="contact">
+  <h2 class="title">Building something that has to <span>move on its own?</span></h2>
+  <p class="sub">
+    I'm looking for robotics, autonomy and UAV roles, research positions and collaborations. The quickest way to
+    reach me is email.
+  </p>
+  <a class="email" href={`mailto:${profile.email}`}>{profile.email}</a>
+  <div class="row">
+    <a class="btn btn-solid" href={`mailto:${profile.email}`}>Email me</a>
+    <a class="btn btn-ghost" href={profile.socials.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn btn-ghost" href={profile.socials.github} target="_blank" rel="noopener">GitHub</a>
+    <a class="btn btn-ghost" href={profile.resumeUrl} target="_blank" rel="noopener">Résumé</a>
   </div>
-  <div class="fine mono">
-    <span>© {year} {profile.name}</span>
-    <span>{profile.location}</span>
-  </div>
+</section>
+
+<footer class="footer">
+  <span>© {year} {profile.name} · {profile.location}</span>
+  <a class="top mono" href="#">Back to top ↑</a>
 </footer>
 
 <style>
-  .footer { padding-bottom: 2.5rem; }
-  .cta {
-    padding: 3.5rem;
-    overflow: hidden;
-    background:
-      radial-gradient(ellipse 60% 80% at 100% 100%, rgba(255, 122, 26, 0.14), transparent 60%),
-      linear-gradient(180deg, var(--panel-2), var(--panel));
-  }
-  .cta-title { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.03em; }
-  .cta-title span { color: var(--accent); }
-  .cta-sub { max-width: 520px; margin: 1.1rem 0 1.5rem; }
+  .contact { max-width: var(--maxw); }
+  .title { font-size: clamp(1.9rem, 4.6vw, 2.8rem); line-height: 1.1; letter-spacing: -0.02em; max-width: 680px; }
+  .title span { color: var(--accent); font-style: italic; }
+  .sub { color: var(--muted); margin: 22px 0 26px; max-width: 540px; font-size: 1.05rem; }
   .email {
     display: inline-block;
-    font-size: clamp(0.9rem, 2.2vw, 1.15rem);
-    color: var(--cyan);
-    border-bottom: 1px solid transparent;
-    word-break: break-all;
+    font-weight: 600;
+    font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: rgba(124, 198, 164, 0.35);
+    text-underline-offset: 7px;
+    margin-bottom: 30px;
+    transition: text-decoration-color 0.2s;
   }
-  .email:hover { border-bottom-color: var(--cyan); }
-  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2rem; }
-  .fine {
+  .email:hover { text-decoration-color: var(--accent); }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .footer {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 40px clamp(20px, 5vw, 40px);
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.75rem;
-    font-size: 0.72rem;
-    color: var(--text-faint);
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 0.85rem;
   }
-  @media (max-width: 640px) {
-    .cta { padding: 2rem 1.4rem; }
-  }
+  .top { color: var(--muted); transition: color 0.25s; }
+  .top:hover { color: var(--accent); }
 </style>
